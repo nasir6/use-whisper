@@ -142,6 +142,7 @@ export const useWhisper: UseWhisperHook = (config) => {
    * start speech recording and start listen for speaking event
    */
   const startRecording = async () => {
+    console.log("start recording 1")
     await onStartRecording()
   }
 
@@ -171,10 +172,12 @@ export const useWhisper: UseWhisperHook = (config) => {
   const onStartRecording = async () => {
     try {
       if (!stream.current) {
+        console.log("start recording 2")
         await onStartStreaming()
       }
       if (stream.current) {
         if (!recorder.current) {
+          console.log("start recording 3")
           const {
             default: { RecordRTCPromisesHandler, StereoAudioRecorder },
           } = await import('recordrtc')
@@ -193,23 +196,31 @@ export const useWhisper: UseWhisperHook = (config) => {
             recorderConfig
           )
         }
+        console.log("start recording 4")
         if (!encoder.current) {
           const { Mp3Encoder } = await import('lamejs')
           encoder.current = new Mp3Encoder(1, 44100, 96)
+          console.log("start recording 5")
         }
         const recordState = await recorder.current.getState()
         if (recordState === 'inactive' || recordState === 'stopped') {
           await recorder.current.startRecording()
+          console.log("start recording 6")
         }
         if (recordState === 'paused') {
           await recorder.current.resumeRecording()
+          console.log("start recording 7")
         }
+        console.log("start recording 8")
         if (nonStop) {
           onStartTimeout('stop')
+          console.log("start recording 9")
         }
+        console.log("start recording 10")
         setRecording(true)
       }
     } catch (err) {
+      console.log("start recording 11")
       console.error(err)
     }
   }
